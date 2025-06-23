@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuanyuan's Shop</title>
+
+   
+
+<!-- <script src="https://cdn.amplitude.com/script/b866d604a10d35b2a2f45bc02716a03e.js"></script>
+<script>
+  window.amplitude.init('b866d604a10d35b2a2f45bc02716a03e', {
+    "fetchRemoteConfig":true, "autocapture":true
+  });
+</script> -->
+
+<script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.7-min.js.gz"></script>
+<script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.4.0-min.js.gz"></script>
+<script>
+            const sessionReplayTracking = window.sessionReplay.plugin({
+                forceSessionTracking: true, // Enable capture of Session Start and Session End events
+                sampleRate: 1, // 100% sample rate, should reduce for production traffic.
+            });
+            window.amplitude.add(sessionReplayTracking);
+            window.amplitude.init("fd53ff8043a436a091a8dcb4aea4ddbd")
+</script>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2em auto;
+            padding: 1em;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1em;
+            padding: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .product img {
+            max-width: 100px;
+            border-radius: 5px;
+        }
+
+        .product-details {
+            flex: 1;
+            margin-left: 1em;
+        }
+
+        .product-name {
+            font-size: 1.2em;
+            margin-bottom: 0.5em;
+        }
+
+        .product-description {
+            margin-bottom: 0.5em;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .add-to-cart {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5em 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-to-cart:hover {
+            background-color: #45a049;
+        }
+
+        .cart {
+            margin-top: 2em;
+            padding: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .view-cart {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 0.5em 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1em;
+        }
+
+        .view-cart:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+
+
+</head>
+<body>
+    <header>
+        <h1>Yuanyuan's Shop</h1>
+    </header>
+
+    <div class="container">
+        <div class="product" id="product-rice">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Rice_paddy_%28IRRI%29.jpg" alt="Rice">
+            <div class="product-details">
+                <div class="product-name">Rice</div>
+                <div class="product-description">High-quality organic rice, perfect for every meal.</div>
+                <div class="product-price">$5.00</div>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('Rice', 5)">Add to Cart</button>
+        </div>
+
+        <div class="product" id="product-lobster">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Lobster_in_tank.jpg" alt="Lobster">
+            <div class="product-details">
+                <div class="product-name">Lobster</div>
+                <div class="product-description">Fresh and juicy lobster, straight from the ocean.</div>
+                <div class="product-price">$20.00</div>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('Lobster', 20)">Add to Cart</button>
+        </div>
+
+        <div class="product" id="product-veggies">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Mixed_vegetables.jpg" alt="Veggies">
+            <div class="product-details">
+                <div class="product-name">Veggies</div>
+                <div class="product-description">A mix of fresh, organic vegetables for healthy meals.</div>
+                <div class="product-price">$3.00</div>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('Veggies', 3)">Add to Cart</button>
+        </div>
+
+        <div class="cart">
+            <h2>Shopping Cart</h2>
+            <ul id="cart-items">
+                <li>No items in cart</li>
+            </ul>
+            <p><strong>Total:</strong> $<span id="cart-total">0.00</span></p>
+            <button class="view-cart" onclick="viewCart()">View Cart</button>
+        </div>
+    </div>
+
+    <script>
+        const cart = [];
+
+        function addToCart(productName, productPrice) {
+            cart.push({ name: productName, price: productPrice });
+            updateCart();
+            console.log("iamhere")
+
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
+                cartItems.appendChild(li);
+                total += item.price;
+            });
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<li>No items in cart</li>';
+            }
+
+            cartTotal.textContent = total.toFixed(2);
+        }
+
+        function viewCart() {
+            alert('Your cart contains:\n' + cart.map(item => `${item.name} - $${item.price.toFixed(2)}`).join('\n'));
+        }
+    </script>
+
+    
+</body>
+</html>
